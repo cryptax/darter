@@ -4,7 +4,8 @@ import json
 import os.path
 
 
-EXPECTED_VERSION = 'c8562f0ee0ebc38ba217c7955956d1cb'
+EXPECTED_VERSION = 'adb4292f3ec25074ca70abcd2d5c7251' # 2.19.1
+DEBUG_LEVEL = 4
 
 MAGIC_VALUE = 0xdcdcf5f5
 
@@ -28,7 +29,11 @@ kTypedDataCidRemainderExternal = 2
 
 kDataSerializationAlignment = 8
 
-kEntryType = [ 'kTaggedObject', 'kImmediate', 'kNativeFunction', 'kNativeFunctionWrapper', 'kNativeEntryData' ]
+kEntryType = ['kTaggedObject',
+              'kImmediate',
+              'kNativeFunction',
+              'kNativeFunctionWrapper',
+              'kNativeEntryData']
 kkEntryType = { k: v for (v, k) in enumerate(kEntryType) }
 decode_object_entry_type_bits = lambda x: { "patchable": not (x >> 7), "type": x & 0x7F }
 
@@ -39,13 +44,14 @@ isTypedDataView = lambda x: __isBase(x, kTypedDataCidRemainderView) or x == kByt
 isExternalTypedData = lambda x: __isBase(x, kTypedDataCidRemainderExternal)
 
 kKind = [
-    ('kFull', "Full snapshot of core libraries or an application"),
+    ('kFull', "Full snapshot of an application"),
+    ('kFullCore', "Full snapshot of core libraries. Agnostic to null safety."),
     ('kFullJIT', "Full + JIT code"),
     ('kFullAOT', "Full + AOT code"),
     ('kMessage', "A partial snapshot used only for isolate messaging"),
     ('kNone', "gen_snapshot"),
     ('kInvalid', None),
-]
+] # Fix related to issue 8
 kkKind = { k[0]: v for (v, k) in enumerate(kKind) }
 
 kPcDescriptorKindBits = [

@@ -172,7 +172,7 @@ class Snapshot:
     """
 
     def __init__(self, data, instructions=None, vm=False, base=None,
-        data_offset=0, instructions_offset=0, print_level=3,
+        data_offset=0, instructions_offset=0, print_level=DEBUG_LEVEL,
         strict=True, parse_rodata=True, parse_csm=True, build_tables=True):
         """ Initialize a parser.
         
