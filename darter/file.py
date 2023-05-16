@@ -18,7 +18,7 @@ def parse_elf_snapshot(fname, **kwargs):
     ''' Open and parse an ELF (executable) AppAOT snapshot. Note that the reported
         offsets are virtual addresses, not physical ones. Returns isolate snapshot.
         NOTE: This method requires pyelftools '''
-    log = lambda n, x: print(x) if kwargs.get('print_level', 3) >= n else None
+    log = lambda n, x: print(x) if kwargs.get('print_level', 4) >= n else None
     if not has_elftools:
         raise Exception('pyelftools not found, install it to use this method')
 
@@ -43,6 +43,7 @@ def parse_elf_snapshot(fname, **kwargs):
                     instructions=blobs[1], instructions_offset=offsets[1],
                     vm=True, **kwargs).parse()
     log(3, '\n------- PARSING ISOLATE SNAPSHOT --------\n')
+
     res = Snapshot(data=blobs[2], data_offset=offsets[2],
                     instructions=blobs[3], instructions_offset=offsets[3],
                     base=base, **kwargs).parse()

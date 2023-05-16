@@ -224,6 +224,7 @@ class Snapshot:
         self.parse_rodata = parse_rodata
         self.parse_csm = parse_csm
         self.do_build_tables = build_tables
+        self.debug(f'Snapshot.__init__(): data_offset={data_offset}')
     
     def parse(self):
         ''' Parse the snapshot. '''
@@ -232,7 +233,7 @@ class Snapshot:
         self.initialize_clusters()
         self.initialize_references()
         
-        self.info('Reading allocation clusters...')
+        self.info(f'Reading {self.num_clusters} allocation clusters...')
         self.clusters = [ self.read_cluster() for _ in range(self.num_clusters) ]
         if self.refs['next']-1 != self.num_objects:
             self.warning('Expected {} total objects, produced {}'.format(self.num_objects, self.refs['next']-1))
@@ -337,6 +338,7 @@ class Snapshot:
         self.num_base_objects, self.num_objects, self.num_clusters, self.code_order_length = (readuint(f) for _ in range(4))
         self.p(1, "  base objects: {}\n  objects: {}\n  clusters: {}\n  code order length = {}\n".format(
             self.num_base_objects, self.num_objects, self.num_clusters, self.code_order_length), show_offset=False)
+        self.debug("parse_header(): end")
 
     # FIXME: let user override settings, too
     def initialize_settings(self):
@@ -438,6 +440,7 @@ class Snapshot:
 
     def read_cluster(self):
         ''' Reads the alloc section of a new cluster '''
+        self.debug(f'calling readcid() offset={self.data.tell()} data={self.data.getvalue()[self.data.tell():self.data.tell()+6]}')
         cid = readcid(self.data)
         self.debug('reading cluster with cid={}'.format(format_cid(cid)))
         if cid >= kNumPredefinedCids:

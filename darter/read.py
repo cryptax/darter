@@ -13,6 +13,7 @@ def readcstr(f):
         buf += b
 
 def readuint(f, bits=64, signed=False):
+    #beginning_offset = f.tell()
     if bits == 8: return unpack('b' if signed else 'B', f.read(1))[0]
     x = 0; s = 0
     while True:
@@ -25,6 +26,7 @@ def readuint(f, bits=64, signed=False):
     #assert x.bit_length() <= bits # stronger assertion (not actually made in dart)
     if x.bit_length() > bits:
         print('--> Int {} longer than {} bits'.format(x, bits))
+    #print(f'readuint(): offset={beginning_offset}-{f.tell()}, value={x}')
     return x
 
 def readint(f, bits=64):
