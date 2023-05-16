@@ -440,9 +440,10 @@ class Snapshot:
 
     def read_cluster(self):
         ''' Reads the alloc section of a new cluster '''
-        self.debug(f'calling readcid() offset={self.data.tell()} data={self.data.getvalue()[self.data.tell():self.data.tell()+6]}')
+        predefined_count = readuint(self.data, bits=64)
         cid = readcid(self.data)
-        self.debug('reading cluster with cid={}'.format(format_cid(cid)))
+        object_count = readuint(self.data)
+        self.debug(f'read_cluster(): predef_count={predefined_count} cid={format_cid(cid)} object_count={object_count}')
         if cid >= kNumPredefinedCids:
             handler = 'Instance'
         elif isTypedData(cid) or isExternalTypedData(cid):
